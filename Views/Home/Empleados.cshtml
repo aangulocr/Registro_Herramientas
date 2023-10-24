@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Registro_Herramientas.Models.Empleado>
+
+@{
+	ViewBag.Title = "Empleado";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Empleados</h2>
+
+<div class="row" style="margin-top:30px">
+	<div class="col-sm-12">
+		<div class="p">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h4>Lista de Empleados</h4>
+
+				</div>
+				<div class="panel-body">
+					<a class="btn btn-success" href="@Url.Action("AgregarEmpleado","Home")">Crear Nuevo</a>
+					<hr />
+					<div class="table-responsive">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Cedula</th>
+									<th>Nombre</th>
+									<th>Apellido</th>
+									<th>Fecha Ingreso</th>
+									<th>Activo</th>
+									<th style="width:150px"></th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach (Registro_Herramientas.Models.Empleado item in Model)
+								{
+									<tr>
+										@{
+											string fecha_formateada = item.Fecha_ingreso.ToString().Substring(0, 10).Trim();
+										}
+										<td>@item.Cedula</td>
+										<td>@item.Nombre</td>
+										<td>@item.Apellido</td>
+										@*<td>@item.fecha_ingreso</td>*@
+										<td>@fecha_formateada</td>
+										<td>@item.Activo</td>
+										<td>
+											<a class="btn btn-primary btn-sm" href="#">Editar</a>
+											<a class="btn btn-danger btn-sm" href="#">Eliminar</a>
+										</td>
+									</tr>
+								}
+
+							</tbody>
+
+
+
+						</table>
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</div>
