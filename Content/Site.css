@@ -18,3 +18,12 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.btn_buscar {
+    background-image: url('~/Images/btn_busqueda.png');
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    height: 32px;
+    width: 32px;
+}

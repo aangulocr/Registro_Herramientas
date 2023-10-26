@@ -149,6 +149,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\btn_busqueda.png" />
     <Content Include="Images\Colaboradores.jpg" />
     <Content Include="Images\tools.jpg" />
     <Content Include="Images\toolsIn.jpg" />
@@ -185,6 +186,7 @@
     <Content Include="Views\Home\AgregarEmpleado.cshtml" />
     <Content Include="Views\Home\Empleados.cshtml" />
     <Content Include="Views\Home\AgregarHerramienta.cshtml" />
+    <Content Include="Views\Home\AgregarRegistro.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
