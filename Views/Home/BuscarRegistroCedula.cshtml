@@ -1,16 +1,11 @@
-﻿
-@model Registro_Herramientas.Models.Empleado
-@*@model IEnumerable<Registro_Herramientas.Models.Registro>*@
-@*@model List<Registro_Herramientas.Models.ModeloEmpleadoRegistro>*@
-
+﻿@model Registro_Herramientas.Models.Registro
 
 @{
-	ViewBag.Title = "AgregarRegistro";
+	ViewBag.Title = "BuscarRegistroCedula";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Agregar Registro</h2>
-
+<h2>Buscar Registros Por Cedula</h2>
 
 
 @using (Html.BeginForm())
@@ -18,7 +13,7 @@
 	@Html.AntiForgeryToken()
 
 	<div class="form-horizontal">
-		<h4>Registro</h4>
+		<h4>Busqueda en Registros</h4>
 		<hr />
 		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 		@*<div class="form-group">
@@ -39,7 +34,7 @@
 					@Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @class = "form-control", PlaceHolder = "Cédula" } })
 				</div>
 				<div class="col-sm">
-					<button class="btn btn-secondary btn-sm" >Buscar</button>
+					<button class="btn btn-secondary btn-sm">Buscar</button>
 				</div>
 			</div>
 		</div>
@@ -49,49 +44,57 @@
 		</div>
 
 		<hr />
-		
 
-		@* Realizar la busqueda por cédula ver si empleado tiene herramientas, cuantas y permitir o denegar
-			Verificar las fechas que no se hayan pasado ...*@
+			@if(ViewBag.Registro != null) 
+			{ 				
+					<div class="row" style="margin-top:30px">
+						<div class="col-sm-12">	
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+									<h4>Registro de Préstamos</h4>
+								</div>
+								<div class="panel-body">
+									<div class="table-responsive" >
+										<table class="table table-striped">
+											<thead>
+												<tr>													
+													<th>Id_movimiento</th>
+													<th>Id Herramienta</th>
+													<th>Herramienta</th>
+													<th>Devuelta</th>
+													<th>Fecha Préstamo</th>
+													<th>Fecha Devuelve</th>
+													<th>Fecha Devolución</th>
+													<th style="width:150px"></th>
+												</tr>
+											</thead>
+											<tbody>
+												@foreach (var item in @ViewBag.Registro)
+												{
+													string str1 = item.Id_registro.ToString();
+													string str2 = item.Id_herramienta.ToString();
+													string str3 = item.Nombre_herramienta.ToString();
 
-		
+													string fDevolucion = "";
 
-		@*<div class="row" style="margin-top:30px">
-				<div class="col-sm-12">
-					<div class="p">
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<h4>Registro de Préstamos</h4>
-
-							</div>
-							<div class="panel-body">
-
-
-								<div class="table-responsive">
-									<table class="table table-striped">
-										<thead>
-											<tr>
-												<th>Cedula</th>
-												<th>Id Herramienta</th>
-												<th>Devuelta</th>
-												<th>Fecha Préstamo</th>
-												<th>Fecha Devuelve</th>
-												<th>Fecha Devolución</th>
-												<th style="width:150px"></th>
-											</tr>
-										</thead>
-										<tbody>
-											@foreach (Registro_Herramientas.Models.Registro item in Model)
-											{
 												<tr>
+													
 													@{
 														string fPrestamo = item.Fecha_prestamo.ToString().Substring(0, 10).Trim();
 														string fDevuelve = item.Fecha_devuelve.ToString().Substring(0, 10).Trim();
-														string fDevolucion = item.Fecha_devolucion.ToString().Substring(0, 10).Trim();
+														if (String.IsNullOrEmpty(item.Fecha_devolucion.ToString()))
+														{
+															fDevolucion = null;
+														}
+														else
+														{
+															fDevolucion = item.Fecha_devolucion.ToString().Substring(0, 10).Trim();
+														}
 													}
-													<td>@item.Cedula</td>
+													<td>@item.Id_registro</td>
 													<td>@item.Id_herramienta</td>
-													<td>@item.Id_herramienta</td>
+													<td>@item.Nombre_herramienta</td>
+													<td>@item.Devuelta</td>
 													<td>@fPrestamo</td>
 													<td>@fDevuelve</td>
 													<td>@fDevolucion</td>
@@ -99,30 +102,16 @@
 														<a class="btn btn-primary btn-sm" href="#">Editar</a>
 														<a class="btn btn-danger btn-sm" href="#">Eliminar</a>
 													</td>
-												</tr>
-											}
-
-										</tbody>
-
-
-
-									</table>
-
-
-
+												</tr>																							
+												}
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-
-				</div>
-
-			</div>*@
-
-
-
-
-
+					</div>			
+			}
 	</div>
 }
 

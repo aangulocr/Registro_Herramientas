@@ -9,6 +9,8 @@ namespace Registro_Herramientas.Models
     {
         public int Id_registro { get; set; }
         public int Cedula { get; set; }
+        public string Id_herramienta { get; set; }
+        public string Nombre_herramienta { get; set; }
         public bool Devuelta { get; set; }
         public string Fecha_prestamo { get; set; }
         public string Fecha_devuelve { get; set; }

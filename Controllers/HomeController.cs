@@ -110,48 +110,121 @@ namespace BodegaHerramientas.Controllers
         }
 
         [HttpGet]
-        public ActionResult AgregarRegistro() { return View(); }
-        
-        [HttpPost]  
-        public ActionResult AgregarRegistro(Registro objRegistro)
+        public ActionResult BuscarRegistroCedula() { return View(); }
+
+        [HttpPost]
+        public ActionResult BuscarRegistroCedula(string Cedula) 
         {
-            //Aqui es donde se tiene que conectar a la base de datos            
-
-            var _cedula = objRegistro.Cedula;
-
             using (SqlConnection objCon = new SqlConnection(conexion))
             {
                 //****** Procedimiento Almacenado de BdInventario ******
 
                 //****** Validar que la Cedula Exista dentro de los Empleados ******
                 SqlCommand cmd = new SqlCommand("sp_CuentaEmpleadoByCedula", objCon);
-                cmd.Parameters.AddWithValue("Cedula", _cedula);
+                cmd.Parameters.AddWithValue("Cedula", Cedula);
                 cmd.CommandType = CommandType.StoredProcedure;
                 objCon.Open();
 
                 var cuentaCedula = cmd.ExecuteScalar();
                 if (cuentaCedula.Equals(1))
-                {
+                {//Agregando funcion de store procedure
+                    _objRegistro = new List<Registro>();
 
-                }
+                    SqlCommand cmd2 = new SqlCommand("sp_SelectRegistroByCedula", objCon);
+                    cmd2.CommandType = CommandType.StoredProcedure;
+                    cmd2.Parameters.AddWithValue("cedula", Cedula);
+                    //cmd2.Parameters.Add(new SqlParameter("@Cedula", objRegistro.Cedula));                   
+
+                    using (SqlDataReader reader = cmd2.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Registro nuevoRegistro = new Registro();
+
+                            nuevoRegistro.Id_registro = Convert.ToInt32(reader["Id_movimiento"]);                                                        
+                            nuevoRegistro.Id_herramienta = reader["Id_herramienta"].ToString().ToUpper();
+                            nuevoRegistro.Nombre_herramienta = reader["Nombre_herramienta"].ToString().ToUpper();
+                            nuevoRegistro.Devuelta = Convert.ToBoolean(reader["Devuelta"]);
+                            nuevoRegistro.Fecha_prestamo = reader["Fecha_prestamo"].ToString();
+                            nuevoRegistro.Fecha_devuelve = reader["Fecha_devuelve"].ToString();
+                            nuevoRegistro.Fecha_devolucion = reader["Fecha_devolucion"].ToString();
+
+                            _objRegistro.Add(nuevoRegistro);
+                        }
+                    }
+                    ViewBag.Registro = _objRegistro.ToList();
+
+                    return View();
+                }//Agregado de storeprocedure
                 else { ViewBag.Mensaje = "CÉDULA NO EXISTE, COLABORADOR NO EXISTE O ERROR DE NÚMERO DE CÉDULA"; }
-                
-                
-                //SqlDataReader reader = cmd.ExecuteReader();               
-                //
-                //var cuentaCedula = reader.Read();
-                //SqlCommand cmd = new SqlCommand("sp_SelectRegistroByCedula", objCon);
-                //cmd.Parameters.AddWithValue("Cedula", _cedula);
-                //cmd.CommandType = CommandType.StoredProcedure;
-                //objCon.Open();
-
-                //SqlDataReader reader = cmd.ExecuteReader();
-                //while (reader.Read())
-                //{
-                //    //Procesar las filas
-                    
-                //}
             }
+            AgregarRegistro(_objRegistro);
+            return View(); 
+        }
+
+        [HttpGet]
+        public ActionResult AgregarRegistro() {            
+            
+            
+            return View();
+        }
+        
+
+        //********** OJO CORREGIR DE AQUÍ - CREAR OTRO PAGINA DONDE SE RECORRA LA LISTA DE PRESTAMOS*******
+        [HttpPost]  
+        public ActionResult AgregarRegistro(List<Registro> _objRegistro)
+        {
+            //Aqui es donde se tiene que conectar a la base de datos                       
+
+            
+
+            //using (SqlConnection objCon = new SqlConnection(conexion))
+            //{
+            //    //****** Procedimiento Almacenado de BdInventario ******
+
+            //    //****** Validar que la Cedula Exista dentro de los Empleados ******
+            //    SqlCommand cmd = new SqlCommand("sp_CuentaEmpleadoByCedula", objCon);
+            //    cmd.Parameters.AddWithValue("Cedula", Cedula);
+            //    cmd.CommandType = CommandType.StoredProcedure;
+            //    objCon.Open();
+
+            //    var cuentaCedula = cmd.ExecuteScalar();
+            //    if (cuentaCedula.Equals(1))
+            //    {//Agregando funcion de store procedure
+            //        _objRegistro = new List<Registro>();
+
+            //        SqlCommand cmd2 = new SqlCommand("sp_SelectRegistroByCedula", objCon);
+            //        cmd2.CommandType = CommandType.StoredProcedure;
+            //        cmd2.Parameters.AddWithValue("cedula", cedula);
+            //        //cmd2.Parameters.Add(new SqlParameter("@Cedula", objRegistro.Cedula));
+
+                    
+            //        //objCon.Open();
+                   
+
+            //        using (SqlDataReader reader = cmd2.ExecuteReader())
+            //        {
+            //            while (reader.Read())
+            //            {
+            //                Registro nuevoRegistro = new Registro();
+
+            //                nuevoRegistro.Cedula = Convert.ToInt32(reader["Cedula"]);
+            //                nuevoRegistro.Id_herramienta = reader["Id_herramienta"].ToString().ToUpper();
+            //                nuevoRegistro.Devuelta = Convert.ToBoolean(reader["Devuelta"]);
+            //                nuevoRegistro.Fecha_prestamo = reader["Fecha_prestamo"].ToString();
+            //                nuevoRegistro.Fecha_devuelve = reader["Fecha_devuelve"].ToString();
+            //                nuevoRegistro.Fecha_devolucion = reader["Fecha_devolucion"].ToString();
+
+
+            //                _objRegistro.Add(nuevoRegistro);
+            //            }
+            //        }
+            //        ViewBag.Registro = _objRegistro;
+
+            //        return View();
+            //    }//Agregado de storeprocedure
+            //    else { ViewBag.Mensaje = "CÉDULA NO EXISTE, COLABORADOR NO EXISTE O ERROR DE NÚMERO DE CÉDULA"; }                               
+            //}
 
             //return RedirectToAction("AgregarRegistro", "Home");
             return View();

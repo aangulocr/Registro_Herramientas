@@ -2,10 +2,6 @@
 	ViewBag.Title = "Home Page";
 }
 
-@{
-	ViewBag.Title = "Home Page";
-}
-
 <main>
 	<h1>Bodega de Herramientas</h1>
 	<div class="row row-cols-1 row-cols-md-4 g-2">
@@ -32,7 +28,7 @@
 			</a>
 		</div>
 		<div class="col">
-			<a href="#" style="text-decoration:none">
+			<a href="@Url.Action("BuscarRegistroCedula","Home")" style="text-decoration:none">
 				<div class="card">
 					<img src="~/Images/toolsOut.jpg" class="card-img-top" alt="...">
 					<div class="card-body">
