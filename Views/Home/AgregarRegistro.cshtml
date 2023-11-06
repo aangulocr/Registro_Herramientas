@@ -1,133 +1,66 @@
 ﻿
-@model Registro_Herramientas.Models.Empleado
-@*@model IEnumerable<Registro_Herramientas.Models.Registro>*@
-@*@model List<Registro_Herramientas.Models.ModeloEmpleadoRegistro>*@
+@model Registro_Herramientas.Models.Registro
 
 
 @{
 	ViewBag.Title = "AgregarRegistro";
 	Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 <h2>Agregar Registro</h2>
 
-
-
-@using (Html.BeginForm())
-{
-	@Html.AntiForgeryToken()
-
-	<div class="form-horizontal">
-		<h4>Registro</h4>
-		<hr />
-		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-		@*<div class="form-group">
-				@Html.LabelFor(model => model.Id_registro, htmlAttributes: new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
-					@Html.EditorFor(model => model.Id_registro, new { htmlAttributes = new { @class = "form-control" } })
-					@Html.ValidationMessageFor(model => model.Id_registro, "", new { @class = "text-danger" })
-				</div>
-			</div>*@
-
-		<div class="form-group">
-			<div class="row g-3">
-				@Html.LabelFor(model => model.Cedula, htmlAttributes: new { @class = "control-label" })
-
-			</div>
-			<div class="row g-3">
-				<div class="col-sm-3">
-					@Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @class = "form-control", PlaceHolder = "Cédula" } })
-				</div>
-				<div class="col-sm">
-					<button class="btn btn-secondary btn-sm" >Buscar</button>
-				</div>
-			</div>
-		</div>
-		@Html.ValidationMessageFor(model => model.Cedula, "", new { @class = "text-danger" })
-		<div class="text-danger col-md-10">
-			@ViewBag.Mensaje
-		</div>
-
-		<hr />
-		
-
-		@* Realizar la busqueda por cédula ver si empleado tiene herramientas, cuantas y permitir o denegar
-			Verificar las fechas que no se hayan pasado ...*@
-
-		
-
-		@*<div class="row" style="margin-top:30px">
-				<div class="col-sm-12">
-					<div class="p">
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<h4>Registro de Préstamos</h4>
-
-							</div>
-							<div class="panel-body">
-
-
-								<div class="table-responsive">
-									<table class="table table-striped">
-										<thead>
-											<tr>
-												<th>Cedula</th>
-												<th>Id Herramienta</th>
-												<th>Devuelta</th>
-												<th>Fecha Préstamo</th>
-												<th>Fecha Devuelve</th>
-												<th>Fecha Devolución</th>
-												<th style="width:150px"></th>
-											</tr>
-										</thead>
-										<tbody>
-											@foreach (Registro_Herramientas.Models.Registro item in Model)
-											{
-												<tr>
-													@{
-														string fPrestamo = item.Fecha_prestamo.ToString().Substring(0, 10).Trim();
-														string fDevuelve = item.Fecha_devuelve.ToString().Substring(0, 10).Trim();
-														string fDevolucion = item.Fecha_devolucion.ToString().Substring(0, 10).Trim();
-													}
-													<td>@item.Cedula</td>
-													<td>@item.Id_herramienta</td>
-													<td>@item.Id_herramienta</td>
-													<td>@fPrestamo</td>
-													<td>@fDevuelve</td>
-													<td>@fDevolucion</td>
-													<td>
-														<a class="btn btn-primary btn-sm" href="#">Editar</a>
-														<a class="btn btn-danger btn-sm" href="#">Eliminar</a>
-													</td>
-												</tr>
-											}
-
-										</tbody>
-
-
-
-									</table>
-
-
-
-								</div>
-							</div>
-						</div>
-					</div>
-
-				</div>
-
-			</div>*@
-
-
-
-
-
-	</div>
-}
+<div class="text-bg-danger">@ViewBag.Error</div>
 
 <div>
-	@Html.ActionLink("Back to List", "Index")
+	@using (Html.BeginForm("AgregarRegistro", "Home", FormMethod.Post))
+	{
+		@Html.AntiForgeryToken()
+
+			<div class="mb-3 col-md-4">
+				<label>Cédula</label>
+				<input type="text" class="form-control" name="Cedula" value="@Html.DisplayTextFor(m => m.Cedula)" readonly="readonly" />
+			</div>
+
+			<div class="mb-3 col-md-4">
+				<label>Id Herramienta</label>
+				<input type="text" class="form-control" name="Id_herramienta" value="@Html.DisplayTextFor(m => m.Id_herramienta)" readonly="readonly" />
+			</div>
+
+			<div class="mb-3 col-md-4">
+				<label>Nombre de Herramienta</label>
+				<input type="text" class="form-control" name="Nombre_herramienta" value="@Html.DisplayTextFor(m => m.Nombre_herramienta)" readonly="readonly" />
+			</div>
+
+			<div class="mb-3 col-md-4">
+				<label>Herremienta Devuelta</label>
+				<input type="text" class="form-control" name="Devuelta" value="@Html.DisplayTextFor(m => m.Devuelta)" readonly="readonly" />
+			</div>
+
+			<div class="mb-3 col-md-4">
+				<label>Fecha de Prestamo</label>
+				<input type="text" class="form-control" name="Fecha_prestamo" value="@Html.DisplayTextFor(m => m.Fecha_prestamo)" readonly="readonly" />
+			</div>
+
+			<div class="mb-3 col-md-4">
+				<label>Fecha Devuelve</label>
+				<input type="text" class="form-control" name="Fecha_devuelve" value="@Html.DisplayTextFor(m => m.Fecha_devuelve)" readonly="readonly" />
+			</div>
+
+			<div class="mb-3">
+				<label hidden>Fecha Devolución</label>
+				<input hidden type="date" class="form-control" name="Fecha_devolucion" value="@Html.DisplayTextFor(m => m.Fecha_devolucion)" readonly="readonly" />
+			</div>
+			<div class="mb-3">
+				<button type="submit" class="btn btn-primary">Guardar</button>
+			</div>
+	}	
+</div>
+
+
+
+<div>
+	@Html.ActionLink("Regresar al Menú", "Index")
 </div>
 
 

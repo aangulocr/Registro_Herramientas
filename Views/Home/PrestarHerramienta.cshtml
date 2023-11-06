@@ -1,0 +1,80 @@
+﻿@*@model Registro_Herramientas.Models.Registro*@
+@model List<Registro_Herramientas.Models.Herramienta>
+@*@model IEnumerable<Registro_Herramientas.Models.Empleado>*@
+
+@{
+	ViewBag.Title = "PrestarHerramienta";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var mCedula = ViewBag.Cedula;
+}
+
+<h2>Prestar Herramienta</h2>
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+
+	<hr />
+
+	<div class="row" style="margin-top:30px">
+		<div class="col-sm-12">
+
+			@* Agregar campos del formulario para buscar herramientas solicitadas
+				buscando del store procedure y ver las herramientas libres por el nombre y hacer un listado en una tabla*@
+
+			<form action="PrestarHerramienta" method="post">
+				<div class="mb-3">
+					<div>Cedula</div>
+					<input type="text" name="Cedula" value="@(ViewBag.Cedula)" disabled />
+				</div>
+
+				<div class="mb-3">
+					<div>Buscar Herramienta</div>
+					<input type="text" name="herramienta" />
+					@*<a type="submit" class="btn btn-success btn-sm" >Buscar Herramienta</a>*@
+					<input type="submit" class="btn btn-success btn-sm" value="Buscar Herramienta" />
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div>
+		@Html.ActionLink("Menú de Registros", "BuscarRegistroCedula")
+	</div>
+
+	<hr />
+
+	//Creando tabla nuevos datos de la clase
+	if (Request.HttpMethod == "POST")
+	{
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Cédula</th>
+						<th>Id Herramienta</th>
+						<th>Nombre Herramienta</th>
+						<th>Descripcion Herramienta</th>
+						<th>Prestada</th>
+						<th style="width:150px"></th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (Registro_Herramientas.Models.Herramienta item in Model)
+					{
+						<tr>
+							<td>@(ViewBag.Cedula)</td>
+							<td>@item.Id_herramienta</td>
+							<td>@item.Nombre_herramienta</td>
+							<td>@item.Descripcion</td>
+							<td>@item.Prestada</td>
+							<td>
+								<a class="btn btn-primary btn-sm" href="@Url.Action("AgregarRegistro","Home", new {idherramienta = item.Id_herramienta})">Prestar</a>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	}
+}

@@ -5,15 +5,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>AgregarHerramienta</h2>
+<h2>Agregar Herramienta</h2>
 
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
-<div class="form-horizontal">
-	<h4>Herramienta</h4>
+<div class="form-horizontal">	
+	
+	<div class="text-bg-danger">@ViewBag.Error</div>
+
 	<hr />
 	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 	<div class="form-group">
@@ -49,10 +51,7 @@
 }
 
 <div class="mt-4">
-	@Html.ActionLink("Menú", "Index")
-	<div class="">
-		@Html.ActionLink("[ Modificar ]", "Index")
-	</div>
+	@Html.ActionLink("Recargar Página", "AgregarHerramienta")
 </div>
 
 @section Scripts {

@@ -7,14 +7,39 @@
 
 <h2>Buscar Registros Por Cedula</h2>
 
+@{var idCedula = 0;}    
+
+
+<div class="text-bg-danger">@ViewBag.Error</div>
+
 
 @using (Html.BeginForm())
 {
 	@Html.AntiForgeryToken()
-
 	<div class="form-horizontal">
-		<h4>Busqueda en Registros</h4>
-		<hr />
+
+	<hr />
+	<div>
+		@{
+			var numPrestamo = 0;
+			if (Request.HttpMethod == "POST")
+			{
+				if(ViewBag.Registro != null) {
+					numPrestamo = 5 - Convert.ToInt32(ViewBag.Registro.Count);				
+					if (numPrestamo == 0)
+					{
+						<h3 class="text-bg-danger text-bg-info">Pasa El límite de Prestamos de Herramientas...</h3>
+					}
+					else
+					{
+						<h3>Numero de Prestamos Posibles: @numPrestamo</h3>
+						<a class="btn btn-success btn-sm" href="@Url.Action("PrestarHerramienta", "Home")">Prestar Herramienta</a>
+					}
+				}
+			}
+		}
+	</div>
+
 		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 		@*<div class="form-group">
 				@Html.LabelFor(model => model.Id_registro, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -23,11 +48,10 @@
 					@Html.ValidationMessageFor(model => model.Id_registro, "", new { @class = "text-danger" })
 				</div>
 			</div>*@
-
+		<br />
 		<div class="form-group">
 			<div class="row g-3">
 				@Html.LabelFor(model => model.Cedula, htmlAttributes: new { @class = "control-label" })
-
 			</div>
 			<div class="row g-3">
 				<div class="col-sm-3">
@@ -45,79 +69,84 @@
 
 		<hr />
 
-			@if(ViewBag.Registro != null) 
-			{ 				
-					<div class="row" style="margin-top:30px">
-						<div class="col-sm-12">	
-							<div class="panel panel-primary">
-								<div class="panel-heading">
-									<h4>Registro de Préstamos</h4>
-								</div>
-								<div class="panel-body">
-									<div class="table-responsive" >
-										<table class="table table-striped">
-											<thead>
-												<tr>													
-													<th>Id_movimiento</th>
-													<th>Id Herramienta</th>
-													<th>Herramienta</th>
-													<th>Devuelta</th>
-													<th>Fecha Préstamo</th>
-													<th>Fecha Devuelve</th>
-													<th>Fecha Devolución</th>
-													<th style="width:150px"></th>
-												</tr>
-											</thead>
-											<tbody>
-												@foreach (var item in @ViewBag.Registro)
-												{
-													string str1 = item.Id_registro.ToString();
-													string str2 = item.Id_herramienta.ToString();
-													string str3 = item.Nombre_herramienta.ToString();
+		@if (ViewBag.Registro != null)
+		{
+			<div class="row" style="margin-top:30px">
+				<div class="col-sm-12">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4>Registro de Préstamos</h4>
+						</div>
+						<div class="panel-body">
+							<div class="table-responsive">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th>Id_movimiento</th>
+											<th>Id Herramienta</th>
+											<th>Herramienta</th>
+											<th>Devuelta</th>
+											<th>Fecha Préstamo</th>
+											<th>Fecha Devuelve</th>
+											<th>Fecha Devolución</th>
+											<th style="width:150px"></th>
+										</tr>
+									</thead>
+									<tbody>
+										@foreach (var item in @ViewBag.Registro)
+										{
+											string str1 = item.Id_registro.ToString();
+											idCedula = item.Cedula;
+											string str2 = item.Id_herramienta.ToString();
+											string str3 = item.Nombre_herramienta.ToString();
 
-													string fDevolucion = "";
+											string fDevolucion = "";
 
-												<tr>
-													
-													@{
-														string fPrestamo = item.Fecha_prestamo.ToString().Substring(0, 10).Trim();
-														string fDevuelve = item.Fecha_devuelve.ToString().Substring(0, 10).Trim();
-														if (String.IsNullOrEmpty(item.Fecha_devolucion.ToString()))
-														{
-															fDevolucion = null;
-														}
-														else
-														{
-															fDevolucion = item.Fecha_devolucion.ToString().Substring(0, 10).Trim();
-														}
+											<tr>
+
+												@{
+													string fPrestamo = item.Fecha_prestamo.ToString().Substring(0, 10).Trim();
+													string fDevuelve = item.Fecha_devuelve.ToString().Substring(0, 10).Trim();
+													if (String.IsNullOrEmpty(item.Fecha_devolucion.ToString()))
+													{
+														fDevolucion = null;
 													}
-													<td>@item.Id_registro</td>
-													<td>@item.Id_herramienta</td>
-													<td>@item.Nombre_herramienta</td>
-													<td>@item.Devuelta</td>
-													<td>@fPrestamo</td>
-													<td>@fDevuelve</td>
-													<td>@fDevolucion</td>
-													<td>
-														<a class="btn btn-primary btn-sm" href="#">Editar</a>
-														<a class="btn btn-danger btn-sm" href="#">Eliminar</a>
-													</td>
-												</tr>																							
+													else
+													{
+														fDevolucion = item.Fecha_devolucion.ToString().Substring(0, 10).Trim();
+													}
 												}
-											</tbody>
-										</table>
-									</div>
-								</div>
+												<td>@item.Id_registro</td>
+												<td>@item.Id_herramienta</td>
+												<td>@item.Nombre_herramienta</td>
+												<td>@item.Devuelta</td>
+												<td>@fPrestamo</td>
+												<td>@fDevuelve</td>
+												<td>@fDevolucion</td>
+												<td>
+													<a class="btn btn-primary btn-sm" href="#">Devolver</a>
+													@*<a class="btn btn-danger btn-sm" href="#">Eliminar</a>*@
+												</td>
+											</tr>
+										}
+										
+									</tbody>
+								</table>
 							</div>
 						</div>
-					</div>			
-			}
+					</div>
+				</div>
+			</div>
+
+
+		}
 	</div>
 }
 
 <div>
-	@Html.ActionLink("Back to List", "Index")
+	@Html.ActionLink("Menú Principal", "Index")
 </div>
+
 
 
 @section Scripts {

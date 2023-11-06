@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Registro_Herramientas.Models.Empleado>
+﻿@*@model IEnumerable<Registro_Herramientas.Models.Empleado>*@
+@model Registro_Herramientas.Models.Empleado
 
 @{
 	ViewBag.Title = "AgregarEmpleado";
@@ -16,36 +17,49 @@
 				</div>
 				<div class="panel-body">
 					<form action="@Url.Action("AgregarEmpleado","Home")" method="post">
-						<div class="form-group">
-							<label>Cedula</label>
-							<input type="text" class="form-control" name="Cedula" />
+						<div class="form-group">														
+							<label>Cedula</label>			
+							<div class="text-danger">
+								@Html.EditorFor(model => model.Cedula)
+								@Html.ValidationMessageFor(model => model.Cedula)
+							</div>
 						</div>
 
 						<div class="form-group">
 							<label>Nombre</label>
-							<input type="text" class="form-control" name="Nombre" />
+							<div class="text-danger">
+								@Html.EditorFor(model => model.Nombre)
+								@Html.ValidationMessageFor(model => model.Nombre)
+							</div>							
 						</div>
 
 						<div class="form-group">
 							<label>Apellido</label>
-							<input type="text" class="form-control" name="Apellido" />
+							<div class="text-danger">
+								@Html.EditorFor(model => model.Apellido)
+								@Html.ValidationMessageFor(model => model.Apellido)
+							</div>
 						</div>
 
-						<div class="form-group">
-							<label for="fecha_ingreso">Fecha de Ingreso</label>
-							<input type="date" id="fecha_ingreso" class="form-control" name="fecha_ingreso" />
+						<div class="form-group">							
+							<label>Fecha de Ingreso</label>
+							<div class="text-danger">
+								<input type="date" name="Fecha_ingreso" />								
+								@Html.ValidationMessageFor(model => model.Fecha_ingreso)
+							</div>
 						</div>
-
+							
 						<div class="form-group mt-3">
-							<input type="checkbox" name="activo" value="true" checked> Empleado [Activo]<br>
+								<input type="checkbox" name="activo" value="true" checked> Empleado [Activo]<br>
 						</div>
-						<br />
-						<button type="submit" class="btn btn-primary">Registrar</button>
+							
+						<br />							
+						<button type="submit" class="btn btn-primary">Registrar</button>							
 						<a class="btn btn-warning" href="@Url.Action("Empleados","Home")">Volver</a>
 
 
 
-					</form>
+</form>
 				</div>
 			</div>
 		</div>

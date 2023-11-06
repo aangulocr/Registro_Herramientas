@@ -188,6 +188,7 @@
     <Content Include="Views\Home\AgregarHerramienta.cshtml" />
     <Content Include="Views\Home\AgregarRegistro.cshtml" />
     <Content Include="Views\Home\BuscarRegistroCedula.cshtml" />
+    <Content Include="Views\Home\PrestarHerramienta.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
