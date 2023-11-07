@@ -19,7 +19,7 @@ namespace BodegaHerramientas.Controllers
         private static List<Empleado> _objEmpleado = new List<Empleado>();
         private static List<Herramienta> _objHerramienta = new List<Herramienta>();
         private static List<Registro> _objRegistro = new List<Registro>();
-        private static int iCedula;
+        private static int iCedula;        
 
         public ActionResult Index()
         {
@@ -144,13 +144,20 @@ namespace BodegaHerramientas.Controllers
         }
 
         [HttpGet]
-        public ActionResult BuscarRegistroCedula() { return View(); }
+        public ActionResult BuscarRegistroCedula() 
+        {
+
+            return View(); 
+        }
 
         [HttpPost]
-        public ActionResult BuscarRegistroCedula(string Cedula) 
+        public ActionResult BuscarRegistroCedula(string Cedula, bool? Devolucion = false) 
         {
             if(Cedula == null || Cedula.Length < 9)
                 return View();
+            
+            ViewBag.Devolucion = Devolucion;
+
 
             iCedula = Convert.ToInt32(Cedula);
             try { 
@@ -203,8 +210,6 @@ namespace BodegaHerramientas.Controllers
             return View(); 
         }
 
-
-        // ****** Nuevo Datos de metodo prestarHerramienta
         [HttpGet]
         public ActionResult PrestarHerramienta() 
         {
@@ -319,7 +324,6 @@ namespace BodegaHerramientas.Controllers
                     cmd.ExecuteNonQuery();
                 }
 
-
                 { ViewBag.Mensaje = "CÉDULA NO EXISTE, COLABORADOR NO EXISTE O ERROR DE NÚMERO DE CÉDULA"; }
 
             }
@@ -330,6 +334,40 @@ namespace BodegaHerramientas.Controllers
             return RedirectToAction("BuscarRegistroCedula", "Home");
             //return View();
         }
-       
+
+
+        // ****** Nuevo Datos de metodo prestarHerramienta
+        [HttpGet]
+        public ActionResult DevolucionHerramienta(string idherramienta)
+        {
+            if (idherramienta == "")
+            {
+                return RedirectToAction("BuscarRegistroCedula", "Home");
+            }
+            
+            Registro oRegistro = (Registro)_objRegistro.Where(c => c.Id_herramienta == idherramienta && c.Devuelta == false).FirstOrDefault();
+           
+            ViewBag.Cedula = iCedula;
+            
+            Registro myRegistro = new Registro();
+            myRegistro.Cedula = iCedula;
+            myRegistro.Id_registro = oRegistro.Id_registro;
+            myRegistro.Id_herramienta = oRegistro.Id_herramienta;
+            myRegistro.Nombre_herramienta = oRegistro.Nombre_herramienta;
+            myRegistro.Devuelta = oRegistro.Devuelta;
+            myRegistro.Fecha_prestamo = oRegistro.Fecha_prestamo.ToString();
+            myRegistro.Fecha_devuelve = oRegistro.Fecha_devuelve.ToString();
+            myRegistro.Fecha_devolucion = DateTime.Today.ToString("d");  
+            //DateTime.Now.AddDays(10);
+
+            return View(myRegistro);
+            
+        }
+
+        [HttpPost]
+        public ActionResult DevolucionHerramienta(Registro miReg)
+        {
+            return View();
+        }
     }
 }

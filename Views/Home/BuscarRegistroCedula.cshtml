@@ -19,26 +19,37 @@
 	<div class="form-horizontal">
 
 	<hr />
-	<div>
-		@{
-			var numPrestamo = 0;
-			if (Request.HttpMethod == "POST")
-			{
-				if(ViewBag.Registro != null) {
-					numPrestamo = 5 - Convert.ToInt32(ViewBag.Registro.Count);				
-					if (numPrestamo == 0)
-					{
-						<h3 class="text-bg-danger text-bg-info">Pasa El límite de Prestamos de Herramientas...</h3>
-					}
-					else
-					{
-						<h3>Numero de Prestamos Posibles: @numPrestamo</h3>
-						<a class="btn btn-success btn-sm" href="@Url.Action("PrestarHerramienta", "Home")">Prestar Herramienta</a>
-					}
-				}
-			}
-		}
-	</div>
+    <div>
+        @{
+            var numPrestamo = 0;
+            if (Request.HttpMethod == "POST")
+            {
+                if (ViewBag.Registro != null)
+                {
+                    numPrestamo = 5 - Convert.ToInt32(ViewBag.Registro.Count);
+                    if (numPrestamo == 0)
+                    {
+                        <h3 class="text-bg-danger text-bg-info">Pasa El límite de Prestamos de Herramientas...</h3>
+                    }
+                    else
+                    {
+
+                        if (!ViewBag.Devolucion)
+                        {
+                            <h3>Numero de Prestamos Posibles: @numPrestamo</h3>
+                            <a class="btn btn-success btn-sm" href="@Url.Action("PrestarHerramienta", "Home")">Prestar Herramienta</a>
+                        }
+                        else
+                        {
+                            <h3>Total de Herramientas Prestadas: @ViewBag.Registro.Count</h3>
+                        }
+
+
+                    }
+                }
+            }
+        }
+    </div>
 
 		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 		@*<div class="form-group">
@@ -123,10 +134,10 @@
 												<td>@fPrestamo</td>
 												<td>@fDevuelve</td>
 												<td>@fDevolucion</td>
-												<td>
-													<a class="btn btn-primary btn-sm" href="#">Devolver</a>
-													@*<a class="btn btn-danger btn-sm" href="#">Eliminar</a>*@
-												</td>
+                                                <td>
+                                                    <a class="btn btn-primary btn-sm" href="@Url.Action("DevolucionHerramienta", "Home", new {idherramienta = item.Id_herramienta} )">Devolver</a>                                                   
+                                                    
+                                                </td>
 											</tr>
 										}
 										
