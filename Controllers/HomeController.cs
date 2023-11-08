@@ -367,7 +367,80 @@ namespace BodegaHerramientas.Controllers
         [HttpPost]
         public ActionResult DevolucionHerramienta(Registro miReg)
         {
-            return View();
+            if (miReg.Fecha_devolucion == null) 
+            {
+                alert("Debe Ingresar Fecha de Devolución Correcta...");
+                return View(miReg);
+            }
+
+
+            //******* Revisar Mensajes al usuario 7/11/23 ********
+
+            if (miReg.Id_registro == 0 || miReg.Id_herramienta == null)
+            {
+                //ViewBag.Mensaje = "Debe tener Id Registro y Fecha de Devolución";
+                //return RedirectToAction("PrestarHerramienta", "Home");               
+                //return View();
+                //Response.Write("<script>alert('login successful');</script>");
+                alert("Debe Ingresar los Datos Correctamente - Dar Clic en Regresar al Menú");
+                //return View(miReg);
+                return View();
+                //return RedirectToAction("BuscarRegistroCedula","Home");
+            }
+            else { 
+                //verificar tiempo de retraso y mostrar advertencia
+                DateTime FechaHoy = DateTime.Today;
+                DateTime FechaDevolucion = DateTime.Parse(miReg.Fecha_devolucion);
+                DateTime FechaDevuelve = DateTime.Parse(miReg.Fecha_devuelve);
+                DateTime FechaPrestamo = DateTime.Parse(miReg.Fecha_prestamo);
+                TimeSpan tSpan = FechaDevuelve - FechaDevolucion;
+                int dias = tSpan.Days;
+
+                if(FechaDevolucion != FechaHoy || FechaDevolucion < FechaPrestamo) 
+                { 
+                    alert("Fecha de Devolución debe ser la Fecha Actual [HOY] \n Fecha de Devolución debe ser Mayor a Fecha de Préstamo...");
+                    return View(miReg);
+                }
+                
+                if (dias > 0) { alert($"Quedan Pendientes {Math.Abs(dias)} Días de Préstamo"); }
+                if(dias < 0) { alert($"Tiene Retraso de {Math.Abs(dias)} Días de Entrega de Herramientas"); }
+                
+                try
+                {
+                    using (SqlConnection objCon = new SqlConnection(conexion))
+                    {
+                        SqlCommand cmd = new SqlCommand("sp_UpdateRegistro", objCon);
+
+                        cmd.Parameters.AddWithValue("Id_movimiento", miReg.Id_registro);
+                        cmd.Parameters.AddWithValue("Fecha_devolucion", miReg.Fecha_devolucion);
+
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        objCon.Open();
+
+                        cmd.ExecuteNonQuery();
+                        //return RedirectToAction("BuscarRegistroCedula", "Home");
+                        ViewBag.Mensaje = "Herramienta Devuelta Correctamente, Dar Clic en Regresar al Menú...";
+                        return View();
+                    }                
+                }
+                catch (SqlException ex)
+                {
+                    ViewBag.Error = ex.Message;
+                }
+            }
+            //return RedirectToAction("Mensaje", "Home");
+            return RedirectToAction("BuscarRegistroCedula", "Home");
+            //return View();
+        }
+
+        public ActionResult Mensaje() 
+        { 
+            return View(); 
+        }
+
+        private void alert(string message)
+        {
+            Response.Write("<script>alert('" + message + "')</script>");           
         }
     }
 }
