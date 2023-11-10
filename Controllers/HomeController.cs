@@ -43,12 +43,14 @@ namespace BodegaHerramientas.Controllers
                         while (reader.Read())
                         {
                             Empleado nuevoEmpleado = new Empleado();
+                            DateTime mDate = new DateTime();
 
                             nuevoEmpleado.Cedula = Convert.ToInt32(reader["Cedula"]);
                             nuevoEmpleado.Nombre = reader["Nombre"].ToString().ToUpper();
                             nuevoEmpleado.Apellido = reader["Apellido"].ToString().ToUpper();
                             //nuevoEmpleado.fecha_ingreso = Convert.ToDateTime(reader["fecha_ingreso"]);
-                            nuevoEmpleado.Fecha_ingreso = reader["Fecha_ingreso"].ToString();
+                            mDate = (DateTime)reader["Fecha_ingreso"];
+                            nuevoEmpleado.Fecha_ingreso = mDate.ToString("dd/MM/yyyy");
                             nuevoEmpleado.Activo = Convert.ToBoolean(reader["Activo"]);
 
                             _objEmpleado.Add(nuevoEmpleado);
@@ -67,7 +69,7 @@ namespace BodegaHerramientas.Controllers
 
         [HttpGet]
         public ActionResult AgregarHerramienta()
-        {
+        {            
             return View(); 
         }
 
@@ -90,7 +92,10 @@ namespace BodegaHerramientas.Controllers
                     objCon.Open();
 
                     cmd.ExecuteNonQuery();
-                    return RedirectToAction("AgregarHerramienta", "Home");
+                    alert("Herramienta Agregada Correctamente");
+                    //return RedirectToAction("AgregarHerramienta", "Home");
+                    ViewBag.Msg = "Herramienta Agregada Correctamente";
+                    return View();
                 }                            
             }
             catch (SqlException ex) {
@@ -104,6 +109,7 @@ namespace BodegaHerramientas.Controllers
         [HttpGet]
         public ActionResult AgregarEmpleado()
         {
+            ViewBag.AlertError = "false";
             return View();
         }
 
@@ -112,7 +118,8 @@ namespace BodegaHerramientas.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewData["Error"] = "Datos Incorrectos";
+                ViewBag.AlertError = "true";
+                ViewBag.Msg = "Datos Incompletos";
                 return View();
             }
             if (objEmpleado.Cedula == 0 || objEmpleado.Nombre == "")
@@ -133,14 +140,21 @@ namespace BodegaHerramientas.Controllers
                     objCon.Open();
 
                     cmd.ExecuteNonQuery();
+                    ViewBag.Msg = "Empleado Guardado Correctamente";
+                    //ViewData["Msg"] = "Empleado Guardado Correctamente ViewData";
+                    alert("Empleado Guardado Correctamente");
+                    //return RedirectToAction("AgregarEmpleado", "Home");
                 }
             }
             catch (SqlException ex)
             {
-                ViewBag.Error = ex.Message;
+                ViewBag.AlertError = "true";
+                ViewBag.Msg = ex.Message;
+                alert(ex.Message);
             }
 
-            return RedirectToAction("AgregarEmpleado", "Home");
+            //return RedirectToAction("AgregarEmpleado", "Home");
+            return View();
         }
 
         [HttpGet]
@@ -182,15 +196,28 @@ namespace BodegaHerramientas.Controllers
                             while (reader.Read())
                             {
                                 Registro nuevoRegistro = new Registro();
+                                DateTime tmpDate = new DateTime();
 
                                 nuevoRegistro.Id_registro = Convert.ToInt32(reader["Id_movimiento"]);
                                 nuevoRegistro.Cedula = Convert.ToInt32( reader["Cedula"].ToString());
                                 nuevoRegistro.Id_herramienta = reader["Id_herramienta"].ToString().ToUpper();
                                 nuevoRegistro.Nombre_herramienta = reader["Nombre_herramienta"].ToString().ToUpper();
                                 nuevoRegistro.Devuelta = Convert.ToBoolean(reader["Devuelta"]);
-                                nuevoRegistro.Fecha_prestamo = reader["Fecha_prestamo"].ToString();
-                                nuevoRegistro.Fecha_devuelve = reader["Fecha_devuelve"].ToString();
-                                nuevoRegistro.Fecha_devolucion = reader["Fecha_devolucion"].ToString();
+                                tmpDate = (DateTime)reader["Fecha_prestamo"];
+                                nuevoRegistro.Fecha_prestamo = tmpDate.ToString("dd/MM/yyyy");
+                                tmpDate = (DateTime)reader["Fecha_devuelve"];
+                                nuevoRegistro.Fecha_devuelve = tmpDate.ToString("dd/MM/yyyy");
+                                if (reader["Fecha_devolucion"] != null)
+                                {
+                                    //ojo ****** Verificar puede ser que sea empty o revisar si es nulo
+                                    tmpDate = (DateTime)reader["Fecha_devolucion"];
+                                    nuevoRegistro.Fecha_devolucion = tmpDate.ToString("dd/MM/yyyy");
+                                }
+                                else {
+                                    nuevoRegistro.Fecha_devolucion = null;
+                                }
+                                
+                                
 
                                 _objRegistro.Add(nuevoRegistro);
                             }

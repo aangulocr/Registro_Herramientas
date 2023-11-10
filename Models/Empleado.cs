@@ -10,6 +10,7 @@ namespace Registro_Herramientas.Models
     {
         [Required(ErrorMessage ="Cédula es obligatorio")]
         [Range(100000000, 999999999,ErrorMessage ="Digitar Cédula Válida")]
+        [Key]
         public int Cedula { get; set; }
         
         [Required(ErrorMessage ="El Nombre es Requerido")]

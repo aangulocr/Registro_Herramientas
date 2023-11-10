@@ -14,8 +14,9 @@
     
 <div class="form-horizontal">	
 	
-	<div class="text-bg-danger">@ViewBag.Error</div>
-
+	<div class="text-bg-danger text-center rounded mx-3">@ViewBag.Error</div>
+	<div class="text-bg-success text-center rounded mx-3">@ViewBag.Msg</div>
+	
 	<hr />
 	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 	<div class="form-group">
@@ -44,14 +45,17 @@
 
 	<div class="form-group mt-3">
 		<div class="col-md-offset-2 col-md-10">
-			<input type="submit" value="Crear Nuevo" class="btn btn-success" />
+			@*<input type="submit" value="Crear Nuevo" class="btn btn-success" />*@
+			<button type="submit" class="btn btn-success"><i class="bi bi-plus-circle"></i> Crear Nuevo</button>
 		</div>
 	</div>
 </div>
 }
 
-<div class="mt-4">
-	@Html.ActionLink("Recargar Página", "AgregarHerramienta")
+<div class="m-4">
+	@Html.ActionLink("Limpiar", "AgregarHerramienta")
+	|
+	@Html.ActionLink("Menú", "Index")
 </div>
 
 @section Scripts {

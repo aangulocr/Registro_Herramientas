@@ -8,6 +8,30 @@
 
 <h2>Agregar Nuevo Empleado</h2>
 
+
+
+@{
+	if (@ViewBag.AlertError == "true")
+	{
+		<div class="alert alert-danger">
+			@ViewBag.Msg
+		</div>
+		<script>
+			mostrarAlerta1();
+			alert('Los datos se grabaron corectamente');
+		</script>
+	}
+	else
+	{
+		if (@ViewBag.Msg != null)
+		{
+			<div class="alert alert-success">
+				@ViewBag.Msg
+			</div>
+		}
+	}
+}
+
 <div class="row" style="margin-top:30px">
 	<div class="col-sm-12">
 		<div class="p">
@@ -16,9 +40,9 @@
 					<h4>Empleado:</h4>
 				</div>
 				<div class="panel-body">
-					<form action="@Url.Action("AgregarEmpleado","Home")" method="post">
-						<div class="form-group">														
-							<label>Cedula</label>			
+					<form id="formulario" action="@Url.Action("AgregarEmpleado","Home")" method="post">
+						<div class="form-group">
+							<label>Cedula</label>
 							<div class="text-danger">
 								@Html.EditorFor(model => model.Cedula)
 								@Html.ValidationMessageFor(model => model.Cedula)
@@ -30,7 +54,7 @@
 							<div class="text-danger">
 								@Html.EditorFor(model => model.Nombre)
 								@Html.ValidationMessageFor(model => model.Nombre)
-							</div>							
+							</div>
 						</div>
 
 						<div class="form-group">
@@ -41,25 +65,22 @@
 							</div>
 						</div>
 
-						<div class="form-group">							
+						<div class="form-group">
 							<label>Fecha de Ingreso</label>
 							<div class="text-danger">
-								<input type="date" name="Fecha_ingreso" />								
+								<input type="date" name="Fecha_ingreso" />
 								@Html.ValidationMessageFor(model => model.Fecha_ingreso)
 							</div>
 						</div>
-							
+
 						<div class="form-group mt-3">
-								<input type="checkbox" name="activo" value="true" checked> Empleado [Activo]<br>
+							<input type="checkbox" name="activo" value="true" checked> Empleado [Activo]<br>
 						</div>
-							
-						<br />							
-						<button type="submit" class="btn btn-primary">Registrar</button>							
-						<a class="btn btn-warning" href="@Url.Action("Empleados","Home")">Volver</a>
 
-
-
-</form>
+						<br />
+						<button type="submit" class="btn btn-primary"><i class="bi bi-floppy2-fill"></i> Registrar</button>
+						<a class="btn btn-warning" href="@Url.Action("Empleados","Home")"><i class="bi bi-arrow-90deg-left"></i> Volver</a>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -67,3 +88,39 @@
 	</div>
 
 </div>
+
+
+@section Scripts{
+	<script>
+		function mostrarAlerta1() {
+			Swal.fire('Messaje ');
+		}
+
+		function mostrarAlerta2() {
+			Swal.fire('Excelente', "Guardado Correctamente", 'success');
+		}
+
+		function mostrarError() {
+			Swal.fire('Error', 'Error de Autenticacion', 'error');
+		}
+
+		function enviarFormulario(e) {
+			e.preventDefault();
+
+			Swal.fire({
+				title: 'Quiere Guardar los Datos?',
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonText: 'Si'
+			}).then((resultado) => {
+				if (resultado.isConfirmed) {
+					const formulario = document.getElementById('formulario');
+					formulario.submit();
+				}
+			})
+
+
+		}
+
+	</script>
+}

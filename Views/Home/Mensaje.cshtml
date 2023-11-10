@@ -6,18 +6,22 @@
 
 @{var mensaje = "Debe Agregar Fecha de Devolución";}
 
+<div>
+	@ViewBag.Error
+</div>
+
 <div class="container">
 
-			<div class="rounded-3">
-				
-				<script>alert(@mensaje)</script>"
-				<h3 class="text-bg-danger text-bg-info">Debe Insertar la Fecha de Devolución No Puede estar Vacía</h3>
-			</div>
-			<div>
-				@Html.ActionLink("Regresar al Menú", "Index")
-			</div>
+	<div class="rounded-3">
 
-	
+		<script>alert(@mensaje)</script>"
+		<h3 class="text-bg-danger text-bg-info">Debe Insertar la Fecha de Devolución No Puede estar Vacía</h3>
+	</div>
+	<div>
+		@Html.ActionLink("Regresar al Menú", "Index")
+	</div>
+
+
 
 </div>
 

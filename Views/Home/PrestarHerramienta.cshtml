@@ -32,7 +32,9 @@
 					<div>Buscar Herramienta</div>
 					<input type="text" name="herramienta" />
 					@*<a type="submit" class="btn btn-success btn-sm" >Buscar Herramienta</a>*@
-					<input type="submit" class="btn btn-success btn-sm" value="Buscar Herramienta" />
+					
+					<button type="submit" class="btn btn-success btn-sm"><i class="bi bi-binoculars"></i> Buscar Herramienta</button>
+					@*<span><input type="submit" class="btn btn-success btn-sm" value="Buscar Herramienta" /></span>*@
 				</div>
 			</form>
 		</div>
@@ -69,7 +71,7 @@
 							<td>@item.Descripcion</td>
 							<td>@item.Prestada</td>
 							<td>
-								<a class="btn btn-primary btn-sm" href="@Url.Action("AgregarRegistro","Home", new {idherramienta = item.Id_herramienta})">Prestar</a>
+								<a class="btn btn-primary btn-sm" href="@Url.Action("AgregarRegistro","Home", new {idherramienta = item.Id_herramienta})"><i class="bi bi-plus-circle"></i> Prestar</a>
 							</td>
 						</tr>
 					}

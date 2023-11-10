@@ -10,6 +10,7 @@ namespace Registro_Herramientas.Models
     {
         [Required(ErrorMessage = "ID Herramienta es obligatorio")]
         [StringLength(6, MinimumLength = 3, ErrorMessage = "ID debe tener entre 3 y 6 caracteres")]
+        [Key]
         public string Id_herramienta { get; set; }
 
         [Required(ErrorMessage = "Nombre Herramienta es obligatorio")]
