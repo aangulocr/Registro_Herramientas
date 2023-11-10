@@ -18,8 +18,8 @@
 		@Html.AntiForgeryToken()
 
 		<div class="mb-3 col-md-4">
-			<label>ID Registro</label>
-			<input type="text" class="form-control" name="Id_registro" value="@Html.DisplayTextFor(m => m.Id_registro)" readonly="readonly" />
+			<label hidden>ID Registro</label>
+			<input hidden type="text" class="form-control" name="Id_registro" value="@Html.DisplayTextFor(m => m.Id_registro)" readonly="readonly" />
 		</div>
 
 		<div class="mb-3 col-md-4">

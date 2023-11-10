@@ -207,19 +207,12 @@ namespace BodegaHerramientas.Controllers
                                 nuevoRegistro.Fecha_prestamo = tmpDate.ToString("dd/MM/yyyy");
                                 tmpDate = (DateTime)reader["Fecha_devuelve"];
                                 nuevoRegistro.Fecha_devuelve = tmpDate.ToString("dd/MM/yyyy");
-                                if (reader["Fecha_devolucion"] != null)
-                                {
-                                    //ojo ****** Verificar puede ser que sea empty o revisar si es nulo
-                                    tmpDate = (DateTime)reader["Fecha_devolucion"];
-                                    nuevoRegistro.Fecha_devolucion = tmpDate.ToString("dd/MM/yyyy");
-                                }
-                                else {
-                                    nuevoRegistro.Fecha_devolucion = null;
-                                }
-                                
-                                
+
+                                //nuevoRegistro.Fecha_devolucion = tmpDate.ToString("dd/MM/yyyy");
+                                nuevoRegistro.Fecha_devolucion = "";                                                                
 
                                 _objRegistro.Add(nuevoRegistro);
+
                             }
                         }
                         ViewBag.Registro = _objRegistro.ToList();
