@@ -45,8 +45,9 @@
 										<td>@fecha_formateada</td>
 										<td>@item.Activo</td>
 										<td>
-											<a class="btn btn-primary btn-sm" href="#"><i class="bi bi-pencil-square"></i></a>
-											<a class="btn btn-danger btn-sm" href="#"><i class="bi bi-trash"></i></a>
+											<a class="btn btn-primary btn-sm" href="@Url.Action("ActualizarEmpleado", "Home", new {Cedula = item.Cedula})" ><i class="bi bi-pencil-square"></i></a>
+											
+											<a class="btn btn-danger btn-sm" href="@Url.Action("BorrarEmpleado", "Home", new {Cedula = item.Cedula})"><i class="bi bi-trash"></i></a>
 										</td>
 									</tr>
 								}

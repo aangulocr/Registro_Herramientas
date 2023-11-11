@@ -197,6 +197,8 @@
     <Content Include="Views\Home\PrestarHerramienta.cshtml" />
     <Content Include="Views\Home\DevolucionHerramienta.cshtml" />
     <Content Include="Views\Home\Mensaje.cshtml" />
+    <Content Include="Views\Home\ActualizarEmpleado.cshtml" />
+    <Content Include="Views\Home\BorrarEmpleado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

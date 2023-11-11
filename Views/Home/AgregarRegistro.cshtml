@@ -12,7 +12,7 @@
 
 <div class="text-bg-danger">@ViewBag.Error</div>
 
-<div>
+
 	@using (Html.BeginForm("AgregarRegistro", "Home", FormMethod.Post))
 	{
 		@Html.AntiForgeryToken()
@@ -55,7 +55,7 @@
 				<button type="submit" class="btn btn-primary"><i class="bi bi-floppy"></i> Guardar</button>
 			</div>
 	}	
-</div>
+
 
 
 

@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Registro_Herramientas.Models;
 using Microsoft.Ajax.Utilities;
 using System.Web.UI;
+using System.Web.UI.WebControls.WebParts;
 
 namespace BodegaHerramientas.Controllers
 {
@@ -19,7 +20,7 @@ namespace BodegaHerramientas.Controllers
         private static List<Empleado> _objEmpleado = new List<Empleado>();
         private static List<Herramienta> _objHerramienta = new List<Herramienta>();
         private static List<Registro> _objRegistro = new List<Registro>();
-        private static int iCedula;        
+        private static int iCedula;
 
         public ActionResult Index()
         {
@@ -31,7 +32,7 @@ namespace BodegaHerramientas.Controllers
             _objEmpleado = new List<Empleado>();
 
             try
-            {            
+            {
                 using (SqlConnection objCon = new SqlConnection(conexion))
                 {
                     SqlCommand cmd = new SqlCommand("SELECT * FROM Empleados", objCon);
@@ -69,16 +70,16 @@ namespace BodegaHerramientas.Controllers
 
         [HttpGet]
         public ActionResult AgregarHerramienta()
-        {            
-            return View(); 
+        {
+            return View();
         }
 
         [HttpPost]
         public ActionResult AgregarHerramienta(Herramienta objHerramienta)
         {
-            if(objHerramienta.Id_herramienta == null || objHerramienta.Nombre_herramienta == null)
+            if (objHerramienta.Id_herramienta == null || objHerramienta.Nombre_herramienta == null)
                 return RedirectToAction("AgregarHerramienta", "Home");
-            try { 
+            try {
                 using (SqlConnection objCon = new SqlConnection(conexion))
                 {
                     //****** Procedimiento Almacenado de BdInventario ******
@@ -96,7 +97,7 @@ namespace BodegaHerramientas.Controllers
                     //return RedirectToAction("AgregarHerramienta", "Home");
                     ViewBag.Msg = "Herramienta Agregada Correctamente";
                     return View();
-                }                            
+                }
             }
             catch (SqlException ex) {
                 ViewBag.Error = ex.Message;
@@ -124,7 +125,7 @@ namespace BodegaHerramientas.Controllers
             }
             if (objEmpleado.Cedula == 0 || objEmpleado.Nombre == "")
                 return View();
-            try { 
+            try {
                 using (SqlConnection objCon = new SqlConnection(conexion))
                 {
                     //****** Procedimiento Almacenado de BdInventario ******
@@ -156,6 +157,115 @@ namespace BodegaHerramientas.Controllers
             //return RedirectToAction("AgregarEmpleado", "Home");
             return View();
         }
+
+        public ActionResult ActualizarEmpleado(int? Cedula){
+
+            if (!Cedula.HasValue) {
+                ViewBag.Error = "Error en Número de Cédula";
+                return View();
+            }
+  
+            Empleado oEmpleado = _objEmpleado.Where(c => c.Cedula == Cedula).FirstOrDefault();
+
+            return View(oEmpleado);
+
+        }
+
+        [HttpPost]
+        public ActionResult ActualizarEmpleado(Empleado emp )
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Msg = "Datos Incompletos";
+                return View(emp);
+            }
+
+            if (emp.Cedula>100000000 && emp.Cedula < 999999999)
+            {
+                try
+                {
+                    using (SqlConnection objCon = new SqlConnection(conexion))
+                    {
+                        SqlCommand cmd = new SqlCommand("sp_UpdateEmpleado", objCon);
+
+                        cmd.Parameters.AddWithValue("Cedula", emp.Cedula);
+                        cmd.Parameters.AddWithValue("Nombre", emp.Nombre);
+                        cmd.Parameters.AddWithValue("Apellido", emp.Apellido);
+                        cmd.Parameters.AddWithValue("Fecha_ingreso", emp.Fecha_ingreso);
+                        cmd.Parameters.AddWithValue("Activo", emp.Activo);
+
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        objCon.Open();
+
+                        cmd.ExecuteNonQuery();
+                        //return RedirectToAction("BuscarRegistroCedula", "Home");
+                        ViewBag.Mensaje = "Actualización de Empleado Correcto, Dar Clic en Regresar al Menú...";
+                        return View();
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    ViewBag.Error = ex.Message;
+                    return View();
+                }
+            }
+            ViewBag.Error = "Verificar formato de Cédula";
+            return View();
+        }
+
+        public ActionResult BorrarEmpleado(int? Cedula)
+        {
+
+            if (!Cedula.HasValue)
+            {
+                ViewBag.Error = "Error en Número de Cédula";
+                return View();
+            }
+
+            Empleado oEmpleado = _objEmpleado.Where(c => c.Cedula == Cedula).FirstOrDefault();
+
+            return View(oEmpleado);
+
+        }
+
+        [HttpPost]
+        public ActionResult BorrarEmpleado(Empleado emp)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Msg = "Datos Incompletos";
+                return View(emp);
+            }
+
+            if (emp.Cedula > 100000000 && emp.Cedula < 999999999)
+            {
+                try
+                {
+                    using (SqlConnection objCon = new SqlConnection(conexion))
+                    {
+                        SqlCommand cmd = new SqlCommand("sp_DeleteEmpleado", objCon);
+
+                        cmd.Parameters.AddWithValue("Cedula", emp.Cedula);                       
+
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        objCon.Open();
+
+                        cmd.ExecuteNonQuery();
+                        //return RedirectToAction("BuscarRegistroCedula", "Home");
+                        ViewBag.Mensaje = "Empleado Borrado Correctamente, Dar Clic en Regresar al Menú...";
+                        return View();
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    ViewBag.Error = ex.Message;
+                    return View();
+                }
+            }
+            ViewBag.Error = "Verificar formato de Cédula";
+            return View();
+        }
+
 
         [HttpGet]
         public ActionResult BuscarRegistroCedula() 
@@ -394,7 +504,7 @@ namespace BodegaHerramientas.Controllers
             }
 
 
-            //******* Revisar Mensajes al usuario 7/11/23 ********
+            //******* Revisar Mensajes Fecha de Devolucion no puede ser menor a fecha de prestamo ********
 
             if (miReg.Id_registro == 0 || miReg.Id_herramienta == null)
             {
