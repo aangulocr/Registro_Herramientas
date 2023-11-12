@@ -10,7 +10,7 @@
 @{var idCedula = 0;}    
 
 
-<div class="text-bg-danger">@ViewBag.Error</div>
+<div class="text-bg-danger text-center rounded mx-3">@ViewBag.Error</div>
 
 
 @using (Html.BeginForm())
@@ -29,7 +29,7 @@
                     numPrestamo = 5 - Convert.ToInt32(ViewBag.Registro.Count);
                     if (numPrestamo == 0)
                     {
-                        <h3 class="text-bg-danger text-bg-info">Pasa El límite de Préstamos de Herramientas...</h3>
+                        <h3 class="text-bg-danger text-center rounded mx-3">Pasa El límite de Préstamos de Herramientas, No se le puede Prestar Más</h3>
                     }
                     else
                     {

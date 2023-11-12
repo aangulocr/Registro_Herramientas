@@ -9,7 +9,7 @@
 
 <h2>Borrar Empleado</h2>
 
-<div class="div class=" text-bg-danger text-center rounded mx-3"">
+<div class="text-bg-danger text-center rounded mx-3">
 	@ViewBag.Error
 </div>
 
@@ -31,7 +31,7 @@
 
 	<div class="mb-3 col-md-4">
 		<label>Nombre</label>
-		<input type="text" class="form-control" name="Nombre" value="@Html.DisplayTextFor(m => m.Nombre)" />
+		<input type="text" class="form-control" name="Nombre" value="@Html.DisplayTextFor(m => m.Nombre)" readonly/>
 		<div class="text-danger">
 			@Html.ValidationMessageFor(model => model.Nombre)
 		</div>
@@ -39,17 +39,15 @@
 
 	<div class="mb-3 col-md-4">
 		<label>Apellido</label>
-		<input type="text" class="form-control" name="Apellido" value="@Html.DisplayTextFor(m => m.Apellido)" />
+		<input type="text" class="form-control" name="Apellido" value="@Html.DisplayTextFor(m => m.Apellido)" readonly/>
 		<div class="text-danger">
 			@Html.ValidationMessageFor(model => model.Apellido)
 		</div>
 	</div>
 
-
-	//ojo verificar la fecha de ingreso debe ser la misma
 	<div class="mb-3 col-md-4">
 		<label>Fecha de Ingreso</label>
-		<input type="date" class="form-control" name="Fecha_ingreso" value="@Html.DisplayTextFor(m => m.Fecha_ingreso)" />
+		<input type="text" class="form-control" name="Fecha_ingreso" value="@Html.DisplayTextFor(m => m.Fecha_ingreso)" readonly />
 		<div class="text-danger">
 			@Html.ValidationMessageFor(model => model.Fecha_ingreso)
 		</div>

@@ -1,14 +1,15 @@
 ﻿@model Registro_Herramientas.Models.Registro
 
 @{
-    ViewBag.Title = "DevolucionHerramienta";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "DevolucionHerramienta";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Devolución de Herramienta</h2>
 
-<div class="text-bg-danger">@ViewBag.Error</div>
-<div class="text-bg-success">@ViewBag.Mensaje</div>
+<div class="text-bg-danger text-center rounded mx-3">@ViewBag.Error</div>
+<div class="text-bg-success text-center rounded mx-3">@ViewBag.Mensaje</div>
+
 
 <div>
 	@*@using (Html.BeginForm("AgregarRegistro", "Home", FormMethod.Post))*@
@@ -55,6 +56,7 @@
 		<div class="mb-3">
 			<label>Fecha Devolución</label>
 			<input type="date" class="form-control" name="Fecha_devolucion" value="@Html.DisplayTextFor(m => m.Fecha_devolucion)" />
+			@Html.ValidationMessageFor(model => model.Fecha_devolucion)
 		</div>
 		<div class="mb-3">
 			<button type="submit" class="btn btn-primary"><i class="bi bi-floppy"></i> Guardar</button>
@@ -69,10 +71,10 @@
 
 
 <div>
-    @Html.ActionLink("Regresar al Menú", "Index")
+	@Html.ActionLink("Regresar Buscar Registro", "BuscarRegistroCedula")
 </div>
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryval")
 }

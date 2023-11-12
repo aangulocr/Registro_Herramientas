@@ -176,7 +176,7 @@ namespace BodegaHerramientas.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Msg = "Datos Incompletos";
+                ViewBag.Error = "Datos Incompletos. Retornar a la lista";
                 return View(emp);
             }
 
@@ -199,7 +199,7 @@ namespace BodegaHerramientas.Controllers
 
                         cmd.ExecuteNonQuery();
                         //return RedirectToAction("BuscarRegistroCedula", "Home");
-                        ViewBag.Mensaje = "Actualización de Empleado Correcto, Dar Clic en Regresar al Menú...";
+                        ViewBag.Mensaje = "Actualización de Empleado Correcto, Dar Clic en Retornar...";
                         return View();
                     }
                 }
@@ -233,7 +233,7 @@ namespace BodegaHerramientas.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Msg = "Datos Incompletos";
+                ViewBag.Msg = "Datos Incompletos, Dar clic en Regresa a la Lista";
                 return View(emp);
             }
 
@@ -252,7 +252,7 @@ namespace BodegaHerramientas.Controllers
 
                         cmd.ExecuteNonQuery();
                         //return RedirectToAction("BuscarRegistroCedula", "Home");
-                        ViewBag.Mensaje = "Empleado Borrado Correctamente, Dar Clic en Regresar al Menú...";
+                        ViewBag.Mensaje = "Empleado Borrado Correctamente, Dar Clic en Regresar a la Lista...";
                         return View();
                     }
                 }
@@ -360,7 +360,8 @@ namespace BodegaHerramientas.Controllers
         [HttpPost]
         public ActionResult PrestarHerramienta(string herramienta) 
         {
-            //string sHerramienta = herramienta.Trim();
+            string sHerramienta = herramienta.Trim();
+            ViewBag.Cedula = iCedula;
             try { 
                 using (SqlConnection objCon = new SqlConnection(conexion))
                 {
@@ -371,10 +372,7 @@ namespace BodegaHerramientas.Controllers
                     cmd.Parameters.AddWithValue("Nombre_herramienta", herramienta);
                     cmd.CommandType = CommandType.StoredProcedure;
                     objCon.Open();
-
-                    //var cuentaCedula = cmd.ExecuteScalar();
-
-                    //_objHerramienta
+                   
                     _objHerramienta = new List<Herramienta>();                                 
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
@@ -403,7 +401,12 @@ namespace BodegaHerramientas.Controllers
             {
                 ViewBag.Error = ex.Message;
             }
-            ViewBag.Cedula = iCedula;
+            if (_objHerramienta.Count == 0)
+            {
+                ViewBag.Error = "No hay Herramienta Disponible con ese Nombre, intentar de nuevo o dar clic en Buscar Herramienta para Buscar Manualmente";
+                alert("No hay Herramienta Disponible con ese Nombre, Intentar de Nuevo" );
+            }
+   
             return View(_objHerramienta); 
 
         }
@@ -444,29 +447,39 @@ namespace BodegaHerramientas.Controllers
                     cmd.Parameters.AddWithValue("Cedula", miReg.Cedula);
                     cmd.Parameters.AddWithValue("Id_herramienta", miReg.Id_herramienta.ToString());
                     cmd.Parameters.AddWithValue("Devuelta", miReg.Devuelta);
-                    cmd.Parameters.AddWithValue("Fecha_prestamo", miReg.Fecha_prestamo.ToString());
-                    cmd.Parameters.AddWithValue("Fecha_devuelve", miReg.Fecha_devuelve.ToString());
-                    cmd.Parameters.AddWithValue("Fecha_devolucion", miReg.Fecha_devolucion);
+                    
+                    string tmpDate = miReg.Fecha_prestamo.ToString();
+                    DateTime dtTemp = DateTime.Parse(tmpDate);
+                    string tmpDate2 = miReg.Fecha_devuelve.ToString();
+                    DateTime dtTemp2 = DateTime.Parse(tmpDate2);
+
+                    cmd.Parameters.AddWithValue("Fecha_prestamo", dtTemp);
+                    cmd.Parameters.AddWithValue("Fecha_devuelve", dtTemp2);
+
+                    //cmd.Parameters.AddWithValue("Fecha_prestamo", miReg.Fecha_prestamo.ToString());
+                    //cmd.Parameters.AddWithValue("Fecha_devuelve", miReg.Fecha_devuelve.ToString());
+                    //cmd.Parameters.AddWithValue("Fecha_devolucion", miReg.Fecha_devolucion);
 
                     cmd.CommandType = CommandType.StoredProcedure;
                     objCon.Open();
 
                     cmd.ExecuteNonQuery();
+
+                    alert("Registro Guardado Correctamente");
+                    ViewBag.Mensaje = "Registro Guardado Correctamente";
+                    return View();
+
                 }
-
-                { ViewBag.Mensaje = "CÉDULA NO EXISTE, COLABORADOR NO EXISTE O ERROR DE NÚMERO DE CÉDULA"; }
-
             }
             catch (SqlException ex)
             {
                 ViewBag.Error = ex.Message;
+                return View();
             }
-            return RedirectToAction("BuscarRegistroCedula", "Home");
+            //return RedirectToAction("BuscarRegistroCedula", "Home");
             //return View();
         }
 
-
-        // ****** Nuevo Datos de metodo prestarHerramienta
         [HttpGet]
         public ActionResult DevolucionHerramienta(string idherramienta)
         {
@@ -512,7 +525,7 @@ namespace BodegaHerramientas.Controllers
                 //return RedirectToAction("PrestarHerramienta", "Home");               
                 //return View();
                 //Response.Write("<script>alert('login successful');</script>");
-                alert("Debe Ingresar los Datos Correctamente - Dar Clic en Regresar al Menú");
+                alert("Debe Ingresar los Datos Correctamente - Dar Clic en Regresar al Menú Buscar Registro");
                 //return View(miReg);
                 return View();
                 //return RedirectToAction("BuscarRegistroCedula","Home");
@@ -528,7 +541,8 @@ namespace BodegaHerramientas.Controllers
 
                 if(FechaDevolucion != FechaHoy || FechaDevolucion < FechaPrestamo) 
                 { 
-                    alert("Fecha de Devolución debe ser la Fecha Actual [HOY] \n Fecha de Devolución debe ser Mayor a Fecha de Préstamo...");
+                    alert("Fecha de Devolución debe ser la Fecha Actual [HOY]. Fecha de Devolución debe ser Mayor a Fecha de Préstamo...");
+                    ViewBag.Error = "Fecha de Devolución debe ser la Fecha Actual [HOY]. Y Fecha de Devolución debe ser Mayor a Fecha de Préstamo...";
                     return View(miReg);
                 }
                 
@@ -556,10 +570,11 @@ namespace BodegaHerramientas.Controllers
                 catch (SqlException ex)
                 {
                     ViewBag.Error = ex.Message;
+                    return View();
                 }
             }
             //return RedirectToAction("Mensaje", "Home");
-            return RedirectToAction("BuscarRegistroCedula", "Home");
+            //return RedirectToAction("BuscarRegistroCedula", "Home");
             //return View();
         }
 

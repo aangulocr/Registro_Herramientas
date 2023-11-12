@@ -1,6 +1,4 @@
-﻿@*@model Registro_Herramientas.Models.Registro*@
-@model List<Registro_Herramientas.Models.Herramienta>
-@*@model IEnumerable<Registro_Herramientas.Models.Empleado>*@
+﻿@model List<Registro_Herramientas.Models.Herramienta>
 
 @{
 	ViewBag.Title = "PrestarHerramienta";
@@ -10,6 +8,10 @@
 
 <h2>Prestar Herramienta</h2>
 
+<div class="text-bg-danger text-center rounded mx-3">@ViewBag.Error</div>
+<div class="text-bg-success text-center rounded mx-3">@ViewBag.Mensaje</div>
+
+
 @using (Html.BeginForm())
 {
 	@Html.AntiForgeryToken()
@@ -18,9 +20,6 @@
 
 	<div class="row" style="margin-top:30px">
 		<div class="col-sm-12">
-
-			@* Agregar campos del formulario para buscar herramientas solicitadas
-				buscando del store procedure y ver las herramientas libres por el nombre y hacer un listado en una tabla*@
 
 			<form action="PrestarHerramienta" method="post">
 				<div class="mb-3">
@@ -32,7 +31,7 @@
 					<div>Buscar Herramienta</div>
 					<input type="text" name="herramienta" />
 					@*<a type="submit" class="btn btn-success btn-sm" >Buscar Herramienta</a>*@
-					
+
 					<button type="submit" class="btn btn-success btn-sm"><i class="bi bi-binoculars"></i> Buscar Herramienta</button>
 					@*<span><input type="submit" class="btn btn-success btn-sm" value="Buscar Herramienta" /></span>*@
 				</div>

@@ -32,8 +32,8 @@ namespace Registro_Herramientas.Models
         [Required(ErrorMessage = "Fecha Requerida")]
         public string Fecha_devuelve { get; set; }
 
-
-        public string Fecha_devolucion { get; set; }
+        
+        public string Fecha_devolucion { get; set; }               
 
     }
 }

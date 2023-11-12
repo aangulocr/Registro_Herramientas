@@ -7,15 +7,30 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ActualizarEmpleado</h2>
+<h2>Actualizar Empleado</h2>
 
-<div class="div class="text-bg-danger text-center rounded mx-3"">
-	@ViewBag.Error
-</div>
+<div class="text-bg-danger text-center rounded mx-3">@ViewBag.Error</div>
 
-<div class="text-bg-success text-center rounded mx-3">
-	@ViewBag.Mensaje
-</div>
+<div class="text-bg-success text-center rounded mx-3">@ViewBag.Mensaje</div>
+
+@{
+	var miCedula = @Html.DisplayTextFor(m => m.Cedula).ToHtmlString();
+
+	var miDate = "";
+}
+
+@if (miCedula == "0") { miCedula = "";}
+
+@*@if (!miCedula.Equals(0) || miCedula.ToString() != "" || !miCedula.ToString().IsEmpty())*@
+@if (miCedula != "")
+{
+	var tmpDate = @Html.DisplayTextFor(m => m.Fecha_ingreso);
+	string sdate = tmpDate.ToString();
+
+	DateTime date = DateTime.Parse(sdate);
+	miDate = date.ToString("yyyy-MM-dd");
+}
+
 
 @using (Html.BeginForm("ActualizarEmpleado", "Home", FormMethod.Post))
 {
@@ -46,8 +61,11 @@
 	</div>
 
 	<div class="mb-3 col-md-4">
-		<label>Fecha de Ingreso</label>
-		<input type="date" class="form-control" name="Fecha_ingreso" value="@Html.DisplayTextFor(m => m.Fecha_ingreso)" />
+		@*<label>Fecha de Ingreso</label>*@
+		@*<input type="text" class="form-control" name="Fecha_ingreso" value="@Html.DisplayTextFor(m => m.Fecha_ingreso)" />*@
+		<label>Fecha de Ingreso:</label>
+
+		<input type="date" class="form-control" name="Fecha_ingreso" value=@miDate />
 		<div class="text-danger">
 			@Html.ValidationMessageFor(model => model.Fecha_ingreso)
 		</div>
@@ -61,8 +79,10 @@
 	<div class="mb-3">
 		<button type="submit" class="btn btn-primary"><i class="bi bi-floppy"></i> Guardar</button>
 	</div>
-	}
+}
 
-	<div>
-		@Html.ActionLink("Retornar a Lista", "Empleados")
-	</div>
+
+
+<div>
+	@Html.ActionLink("Retornar a Lista", "Empleados")
+</div>
